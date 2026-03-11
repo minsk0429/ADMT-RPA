@@ -14,7 +14,7 @@ AD-MT (Alternate Dual-Model Training) 프레임워크에 개선된 점진적 증
   - CutMix → Stage 2
 - **Teacher Model A1**: Color Jitter만 적용
 
-#### ADMT-RPA 방식
+#### 새 RPA 방식
 - **Teacher Model A2**: Dice Score 정체 기반으로 Copy-Paste → CutMix 점진적 적용
 - **Teacher Model A1**: **동기화된 Copy-Paste** + Color Jitter
   - A2가 Copy-Paste 단계(Stage 1)일 때, A1도 Copy-Paste 적용
