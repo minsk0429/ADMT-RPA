@@ -4,7 +4,7 @@ AD-MT (Alternate Dual-Model Training) 프레임워크에 개선된 점진적 증
 
 ## 개요
 
-본 연구는 원본 [AD-MT 논문](https://github.com/zhenzhao/AD-MT)을 확장하여 두 Teacher 모델 간 증강 전략을 동기화하는 **Revised Progressive Augmentation (RPA)** 방식을 도입했습니다.
+본 연구는 원본 [AD-MT 논문](https://github.com/zhenzhao/AD-MT)을 확장하여 두 Teacher 모델 간 증강 전략을 동기화하는 새로운 **Revised Progressive Augmentation (RPA)** 방식을 도입했습니다.
 
 ### 핵심 수정사항
 
@@ -14,7 +14,7 @@ AD-MT (Alternate Dual-Model Training) 프레임워크에 개선된 점진적 증
   - CutMix → Stage 2
 - **Teacher Model A1**: Color Jitter만 적용
 
-#### 새 RPA 방식
+#### 새로운 RPA 방식
 - **Teacher Model A2**: Dice Score 정체 기반으로 Copy-Paste → CutMix 점진적 적용
 - **Teacher Model A1**: **동기화된 Copy-Paste** + Color Jitter
   - A2가 Copy-Paste 단계(Stage 1)일 때, A1도 Copy-Paste 적용
