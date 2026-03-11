@@ -1,4 +1,4 @@
-# ADMT-RPA: AD-MT with Revised Progressive Augmentation
+# ADMT-RPA: AD-MT with New Revised Progressive Augmentation
 
 AD-MT (Alternate Dual-Model Training) 프레임워크에 개선된 점진적 증강 전략을 적용한 반지도 의료 영상 분할 구현입니다.
 
