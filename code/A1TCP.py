@@ -106,7 +106,7 @@ def simple_color_copy_paste(img_ulb, pseudo_outputs, pseudo_logits, img_lb, targ
                     img_lb[j:j+1], target_lb[j:j+1]
                 )
 
-                # 🔥 [수정] 진짜로 이미지가 변했는지 픽셀 차이 계산 (Diff Check)
+                # [수정] 진짜로 이미지가 변했는지 픽셀 차이 계산 (Diff Check)
                 # 부동소수점 오차 등을 고려해 1e-4보다 큰 변화가 있어야 함
                 pixel_diff = torch.sum(torch.abs(img_ulb[i] - aug_img[0]))
 
@@ -658,7 +658,7 @@ def train(args, snapshot_path):
     alternate_indicator = AlternateUpdate(alt_param_updating_period_iters,
                                           initial_flag=True, flag_random=alt_flag_updating_period_random)
 
-    # 🔥 EXP3: Dice-based Adaptive Augmentation Scheduler 초기화 (2단계만)
+    # EXP3: Dice-based Adaptive Augmentation Scheduler 초기화 (2단계만)
     aug_scheduler = AdaptiveAugmentationSchedulerExp6(
         patience=args.get("aug_patience", 5),       # 5 validations (10 epochs)
         min_delta=args.get("aug_min_delta", 0.01)  # 1% Dice improvement
@@ -702,7 +702,7 @@ def train(args, snapshot_path):
             num_lb = args["labeled_bs"]
             num_ulb = batch_size - num_lb
 
-            # 👇 [수정] A1과 A2의 성적표를 미리 분리해서 만들어둡니다.
+            # [수정] A1과 A2의 성적표를 미리 분리해서 만들어둡니다.
             pasted_flags_A1 = [False] * batch_size 
             pasted_flags_A2 = [False] * batch_size
 
@@ -832,7 +832,7 @@ def train(args, snapshot_path):
                         color_threshold=args.get("color_threshold", 0.6)
                     )
                     
-                    # 🔥 [핵심] 변경된 라벨을 메인 변수에 '업데이트' 합니다.
+                    # [핵심] 변경된 라벨을 메인 변수에 '업데이트' 합니다.
                     # 이제 시각화 함수도, Loss 계산도 이 '새 라벨'을 보게 됩니다.
                     pseudo_outputs = temp_pseudo_labels
                     pseudo_logits = temp_pseudo_logits
@@ -855,7 +855,7 @@ def train(args, snapshot_path):
             # Store GT BEFORE augmentation for visualization
             target_ulb_before_aug = target_ulb.clone() if 'target_ulb' in locals() else None
 
-            # 🔥 EXP3: Use current augmentation config (2-stage: CP → CutMix) (updated only during validation)
+            # EXP3: Use current augmentation config (2-stage: CP → CutMix) (updated only during validation)
             # aug_config is updated by step_dice() during validation
             aug_config = aug_scheduler.stages[aug_scheduler.current_stage]
 
@@ -902,7 +902,7 @@ def train(args, snapshot_path):
 
                         # 2. Copy-Paste 다시 적용 (Jitter 없이!)
                         if aug_config['cp_prob'] > 0:
-                             # 🚨 [중요 변경]
+                             # [중요 변경]
                              # 1) 'if target_ulb' 조건문 삭제 (구형 함수 제거)
                              # 2) 무조건 신형 함수 사용
                              # 3) 결과는 A2 전용 변수 'pasted_flags_A2'에 저장 (A1과 분리!)
@@ -976,7 +976,7 @@ def train(args, snapshot_path):
                     pred_ulb_w=pred_ulb_w_stu_soft,
                     pred_ulb_s=pred_ulb_s,
                     mtx_bool_conflict=mtx_bool_conflict,
-                    copypaste_applied=is_target_pasted,  # 👈 [수정] 진짜 성공 여부 전달!
+                    copypaste_applied=is_target_pasted,  # [수정] 진짜 성공 여부 전달!
                     cutmix_applied=cutmix_applied,
                     alternate_state=alternate_indicator.get_alternate_state(),
                     snapshot_path=snapshot_path,
@@ -1087,7 +1087,7 @@ def train(args, snapshot_path):
             writer.add_scalar('info/conflict_ratio', conflict_ratio.item(), iter_num)
             writer.add_scalar('info/copypaste_applied', 1.0 if copypaste_applied else 0.0, iter_num)
             writer.add_scalar('info/cutmix_applied', 1.0 if cutmix_applied else 0.0, iter_num)
-            # 🔥 Adaptive Augmentation Logging
+            # Adaptive Augmentation Logging
             writer.add_scalar('info/aug_stage', aug_scheduler.current_stage, iter_num)
             writer.add_scalar('info/aug_cp_prob', aug_config['cp_prob'], iter_num)
             writer.add_scalar('info/aug_cutmix_prob', aug_config['cutmix_prob'], iter_num)
@@ -1196,7 +1196,7 @@ def train(args, snapshot_path):
             writer.add_scalar('info/ema_another_val_mean_dice', ema_another_performance, epoch_num)
             writer.add_scalar('info/ema_another_val_mean_hd95', ema_another_mean_hd95, epoch_num)
 
-            # 🔥 Best Dice 추이 기록
+            # Best Dice 추이 기록
             writer.add_scalar('info/best_dice_student', best_performance_stu, epoch_num)
             writer.add_scalar('info/best_dice_teacher', best_performance, epoch_num)
             writer.add_scalar('info/best_dice_teacher_another', best_performance_another, epoch_num)
@@ -1283,7 +1283,7 @@ def train(args, snapshot_path):
             torch.save(ema_model.state_dict(), save_final_path_tea)
             logging.info("Saved final teacher model to {}".format(save_final_path_tea))
 
-            # 🔥 Save augmentation switch history
+            # Save augmentation switch history
             if len(aug_scheduler.switch_history) > 0:
                 switch_history_path = os.path.join(snapshot_path, 'augmentation_switch_history.csv')
                 switch_df = pd.DataFrame(aug_scheduler.switch_history)

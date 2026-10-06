@@ -204,7 +204,7 @@ def monitor_processes(processes):
             print("\nFinal Results:")
             for p_info in completed:
                 return_code = p_info['process'].returncode
-                status = "✓ SUCCESS" if return_code == 0 else f"✗ FAILED (code: {return_code})"
+                status = "SUCCESS" if return_code == 0 else f"FAILED (code: {return_code})"
 
                 status_data = get_simple_status(p_info['log_file'])
                 final_iter = status_data['current_iter']
